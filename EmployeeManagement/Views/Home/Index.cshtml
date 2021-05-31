@@ -1,30 +1,27 @@
-﻿@model IEnumerable<EmployeeManagement.Models.Employee>
+﻿@model IEnumerable<Employee>
 
-<html xmlns="http://www.w3.org/1999/xhtml">
-<head>
-    <title></title>
-</head>
-<body>
-    <table>
-        <thead>
-            <tr>
-                <th>ID</th>
-                <th>Name</th>
-                <th>Department</th>
-            </tr>
-        </thead>
-        <tbody>
-            @*Following block of code will list all the Employees*@
+@{
+    ViewBag.Title = "Employee List";
+}
 
-            @foreach (var employee in Model)
-            {
-                <tr>
-                    <td>@employee.Id</td>
-                    <td>@employee.Name</td>
-                    <td>@employee.Department</td>
-                </tr>
-            }
-        </tbody>
-    </table>
-</body>
-</html>
+<div class="card-deck">
+    @foreach (var employee in Model)
+    {
+        <div class="card m-3">
+            <div class="card-header">
+                <h3>@employee.Name</h3>
+            </div>
+            <img class="card-img-top" src="~/Images/noimage.jpg" />
+            <div class="card-footer text-center">
+                @*Using Url.Action*@
+                @*<a href="@Url.Action("details", "home", new { id = employee.Id })" class="btn btn-primary">View</a>*@
+                @*Using HTML.ActionLink*@
+                @*@Html.ActionLink("View", "details", "home", new { id = employee.Id })*@
+                @*Using Tag Helper*@
+                <a asp-controller="Home" asp-action="Details" asp-route-id="@employee.Id" class="btn btn-primary m-1">View</a>
+                <a href="#" class="btn btn-primary m-1">Edit</a>
+                <a href="#" class="btn btn-danger m-1">Delete</a>
+            </div>
+        </div>
+    }
+</div>

@@ -1,20 +1,36 @@
-﻿@model EmployeeManagement.ViewModels.HomeDetailsViewModel
+﻿@model HomeDetailsViewModel
 
-<html xmlns="http://www.w3.org/1999/xhtml">
-<head>
-    <title></title>
-</head>
-<body>
-    <h3>@Model.PageTitle</h3>
+@{
+    ViewBag.Title = "Employee Details";
+}
 
-    <div>
-        Name: @Model.Employee.Name
+<div class="row justify-content-center m-3">
+    <div class="col-sm-8">
+        <div class="card">
+            <div class="card-header">
+                <h1>@Model.Employee.Name</h1>
+            </div>
+
+            <div class="card-body text-center">
+                @*Using Image Tag Helper*@
+                <img class="card-img-top" src="~/Images/noimage.jpg" asp-append-version="true" />
+
+                <h4>Employee ID: @Model.Employee.Id</h4>
+                <h4>Email: @Model.Employee.Email</h4>
+                <h4>Department: @Model.Employee.Department</h4>
+            </div>
+
+            <div class="card-footer text-center">
+                
+                @*Using Tag Helper*@
+                <a asp-controller="Home" asp-action="Index" class="btn btn-primary">Back</a>
+                <a href="#" class="btn btn-primary">Edit</a>
+                <a href="#" class="btn btn-danger">Delete</a>
+            </div>
+        </div>
     </div>
-    <div>
-        Email: @Model.Employee.Email
-    </div>
-    <div>
-        Department: @Model.Employee.Department
-    </div>
-</body>
-</html>
+</div>
+
+@section Scripts{
+    <script src="~/js/CustomScript.js"></script>
+}

@@ -28,6 +28,9 @@ namespace EmployeeManagement
             //services.AddRazorPages();
             
             services.AddMvc(options => options.EnableEndpointRouting = false);
+            // In .Net Core versions like 2.0 and lower, refreshing the page used to compile the project in runtime.
+            // Added following line in order to enable runtime compilation in .Net 5.0 (We are using .Net 5.0.)
+            services.AddControllersWithViews().AddRazorRuntimeCompilation();
             services.AddSingleton<IEmployeeRepository, MockEmployeeRepository>();
         }
 
@@ -45,7 +48,12 @@ namespace EmployeeManagement
 
             app.UseStaticFiles();
             //app.UseRouting();
-            app.UseMvcWithDefaultRoute();
+            //app.UseMvcWithDefaultRoute();
+            app.UseMvc(routes =>
+            {
+                routes.MapRoute("default", "{controller=Home}/{action=Index}/{id?}");
+            });
+            
             //app.UseAuthorization();
 
             //app.UseEndpoints(endpoints =>
@@ -53,11 +61,11 @@ namespace EmployeeManagement
             //    endpoints.MapRazorPages();
             //});
 
-            app.Run(async (context) =>
-            {
-                await context.Response
-                .WriteAsync("Hello World!");
-            });
+            //app.Run(async (context) =>
+            //{
+            //    await context.Response
+            //    .WriteAsync("Hello World!");
+            //});
         }
     }
 }
