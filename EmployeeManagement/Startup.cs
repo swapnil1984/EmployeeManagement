@@ -39,7 +39,8 @@ namespace EmployeeManagement
             // Following line is an example of how Dependency Injection can be configured
             // It tells the system that whenever someone asks for IEmployeeRepository, provide them an instance of SQLEmployeeRepository class
             // When there are multiple implementations of same interface, this is where dependency gets injected.
-            // Notice, we have used AddScoped lifetime of a service
+            // Notice, we have used AddScoped lifetime of the service while using SQLRepository because according to .Net Documentation,
+            // Entity Framework contexts are added to the services container using the Scoped lifetime
             services.AddScoped<IEmployeeRepository, SQLEmployeeRepository>();
         }
 
