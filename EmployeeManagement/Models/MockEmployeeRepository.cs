@@ -14,10 +14,28 @@ namespace EmployeeManagement.Models
         {
             _employeeList = new List<Employee>()
             {
-                new Employee() { Id = 1, Name = "Swapnil", Department = "Engineering", Email = "blah.blah@yahoo1.com" },
-                new Employee() { Id = 2, Name = "John", Department = "HR", Email = "john.doe@gmail.com" },
-                new Employee() { Id = 3, Name = "Ashlee", Department = "Sales", Email = "blah.blah1@hotmail.com" }
+                new Employee() { Id = 1, Name = "Swapnil", Department = Dept.IT, Email = "blah.blah@yahoo1.com" },
+                new Employee() { Id = 2, Name = "John", Department = Dept.Payroll, Email = "john.doe@gmail.com" },
+                new Employee() { Id = 3, Name = "Ashlee", Department = Dept.HR, Email = "blah.blah1@hotmail.com" }
             };
+        }
+
+        public Employee Add(Employee employee)
+        {
+            employee.Id = _employeeList.Max(e => e.Id) + 1;
+            _employeeList.Add(employee);
+            return employee;
+        }
+
+        public Employee Delete(int id)
+        {
+            Employee employee = _employeeList.FirstOrDefault(e => e.Id == id);
+
+            if (employee != null)
+            {
+                _employeeList.Remove(employee);
+            }
+            return employee;
         }
 
         public IEnumerable<Employee> GetAllEmployees()
@@ -28,6 +46,19 @@ namespace EmployeeManagement.Models
         public Employee GetEmployee(int Id)
         {
             return _employeeList.FirstOrDefault(e => e.Id == Id);
+        }
+
+        public Employee Update(Employee employeeChanges)
+        {
+            Employee employee = _employeeList.FirstOrDefault(e => e.Id == employeeChanges.Id);
+
+            if (employee != null)
+            {
+                employee.Name = employeeChanges.Name;
+                employee.Email = employeeChanges.Email;
+                employee.Department = employeeChanges.Department;
+            }
+            return employee;
         }
     }
 }
