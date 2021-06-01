@@ -8,10 +8,13 @@ using System.Threading.Tasks;
 
 namespace EmployeeManagement.Controllers
 {
+    // Home Controller has a dependency on IEmployeeRepository 
     public class HomeController : Controller
     {
         private readonly IEmployeeRepository _employeeRepository;
 
+        // Here we are injecting IEmployeeRepository into the HomeController by using this constructor
+        // Then we are using _employeeRepository, an injected dependency for different operations shown below
         public HomeController(IEmployeeRepository employeeRepository)
         {
             _employeeRepository = employeeRepository;

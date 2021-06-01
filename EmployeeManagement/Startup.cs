@@ -27,12 +27,19 @@ namespace EmployeeManagement
         public void ConfigureServices(IServiceCollection services)
         {
             //services.AddRazorPages();
+
+            // Following is the line where Database setup/configuration is done. The connection string comes from
+            // appsettings.json file
             services.AddDbContextPool<AppDbContext>(
                 options => options.UseSqlServer(Configuration.GetConnectionString("EmployeeDBConnection")));
             services.AddMvc(options => options.EnableEndpointRouting = false);
             // In .Net Core versions like 2.0 and lower, refreshing the page used to compile the project in runtime.
             // Added following line in order to enable runtime compilation in .Net 5.0 (We are using .Net 5.0.)
             services.AddControllersWithViews().AddRazorRuntimeCompilation();
+            // Following line is an example of how Dependency Injection can be configured
+            // It tells the system that whenever someone asks for IEmployeeRepository, provide them an instance of SQLEmployeeRepository class
+            // When there are multiple implementations of same interface, this is where dependency gets injected.
+            // Notice, we have used AddScoped lifetime of a service
             services.AddScoped<IEmployeeRepository, SQLEmployeeRepository>();
         }
 
