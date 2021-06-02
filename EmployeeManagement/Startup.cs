@@ -54,6 +54,9 @@ namespace EmployeeManagement
             else
             {
                 app.UseExceptionHandler("/Error");
+                // This middleware as opposed to useStatusCodePagesWithRedirect provides proper errors on a HttpRequest.
+                // It does not redirect to a given page rather it reverses the execution of middlewares.
+                app.UseStatusCodePagesWithReExecute("/Error/{0}");
             }
 
             app.UseStaticFiles();
