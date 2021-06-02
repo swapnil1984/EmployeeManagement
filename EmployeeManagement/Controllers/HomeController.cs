@@ -100,7 +100,12 @@ namespace EmployeeManagement.Controllers
                 string uploadsFolder = Path.Combine(webHostEnvironment.WebRootPath, "Images");
                 uniqueFileName = Guid.NewGuid().ToString() + "_" + model.Photo.FileName;
                 string filePath = Path.Combine(uploadsFolder, uniqueFileName);
-                model.Photo.CopyTo(new FileStream(filePath, FileMode.Create));
+
+                using (var fileStream = new FileStream(filePath, FileMode.Create))
+                {
+                    model.Photo.CopyTo(fileStream);
+                }
+                
             }
 
             return uniqueFileName;
