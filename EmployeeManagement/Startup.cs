@@ -2,6 +2,7 @@ using EmployeeManagement.Models;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -32,7 +33,12 @@ namespace EmployeeManagement
             // appsettings.json file
             services.AddDbContextPool<AppDbContext>(
                 options => options.UseSqlServer(Configuration.GetConnectionString("EmployeeDBConnection")));
+
+            services.AddIdentity<IdentityUser, IdentityRole>()
+                    .AddEntityFrameworkStores<AppDbContext>();
+
             services.AddMvc(options => options.EnableEndpointRouting = false);
+
             // In .Net Core versions like 2.0 and lower, refreshing the page used to compile the project in runtime.
             // Added following line in order to enable runtime compilation in .Net 5.0 (We are using .Net 5.0.)
             services.AddControllersWithViews().AddRazorRuntimeCompilation();
@@ -53,6 +59,7 @@ namespace EmployeeManagement
             }
             else
             {
+                // For handling Global Exceptions
                 app.UseExceptionHandler("/Error");
                 // This middleware as opposed to useStatusCodePagesWithRedirect provides proper errors on a HttpRequest.
                 // It does not redirect to a given page rather it reverses the execution of middlewares.
@@ -60,6 +67,7 @@ namespace EmployeeManagement
             }
 
             app.UseStaticFiles();
+            app.UseAuthentication();
             //app.UseRouting();
             //app.UseMvcWithDefaultRoute();
             app.UseMvc(routes =>
