@@ -1,5 +1,6 @@
 ﻿using EmployeeManagement.Models;
 using EmployeeManagement.ViewModels;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
 using System;
@@ -10,7 +11,9 @@ using System.Threading.Tasks;
 
 namespace EmployeeManagement.Controllers
 {
-    // Home Controller has a dependency on IEmployeeRepository 
+    // Home Controller has a dependency on IEmployeeRepository
+
+    [Authorize]
     public class HomeController : Controller
     {
         private readonly IEmployeeRepository employeeRepository;
@@ -24,15 +27,17 @@ namespace EmployeeManagement.Controllers
             this.webHostEnvironment = webHostEnvironment;
         }
 
+        [AllowAnonymous]
         public ViewResult Index()
         {
             var model = employeeRepository.GetAllEmployees();
             return View(model);
         }
 
+        [AllowAnonymous]
         public ViewResult Details(int? id)
         {
-            throw new Exception("Error in Details View");
+            //throw new Exception("Error in Details View");
 
             Employee employee = employeeRepository.GetEmployee(id.Value);
 
@@ -54,6 +59,27 @@ namespace EmployeeManagement.Controllers
         [HttpGet]
         public ViewResult Create()
         {
+            return View();
+        }
+
+        [HttpPost]
+        public IActionResult Create(EmployeeCreateViewModel model)
+        {
+            if (ModelState.IsValid)
+            {
+                string uniqueFileName = processUploadedFile(model);
+
+                Employee newEmployee = new Employee
+                {
+                    Name = model.Name,
+                    Email = model.Email,
+                    Department = model.Department,
+                    PhotoPath = uniqueFileName
+                };
+
+                employeeRepository.Add(newEmployee);
+                return RedirectToAction("details", new { id = newEmployee.Id });
+            }
             return View();
         }
 
@@ -119,26 +145,6 @@ namespace EmployeeManagement.Controllers
             }
 
             return uniqueFileName;
-        }
-
-        [HttpPost]
-        public IActionResult Create(EmployeeCreateViewModel model)
-        {
-            if (ModelState.IsValid)
-            {
-                string uniqueFileName = processUploadedFile(model);
-
-                Employee newEmployee = new Employee {
-                    Name = model.Name,
-                    Email = model.Email,
-                    Department = model.Department,
-                    PhotoPath = uniqueFileName
-                };
-
-                employeeRepository.Add(newEmployee);
-                return RedirectToAction("details", new { id = newEmployee.Id });
-            }
-            return View();
         }
     }
 }

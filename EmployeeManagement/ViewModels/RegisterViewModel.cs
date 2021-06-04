@@ -1,4 +1,6 @@
-﻿using System;
+﻿using EmployeeManagement.Utilities;
+using Microsoft.AspNetCore.Mvc;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
@@ -10,6 +12,8 @@ namespace EmployeeManagement.ViewModels
     {
         [Required]
         [EmailAddress]
+        [Remote(action: "IsEmailInUse", controller: "Account")]
+        [ValidEmailDomain(allowedDomain: "swapnil.com", ErrorMessage = "Email Domain must be swapnil.com")]
         public string Email { get; set; }
 
         [Required]
